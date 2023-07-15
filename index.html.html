@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Star Trek Landingpage</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .loader {
+            position: relative;
+            height: 40px;
+            width: 500px;
+            border: 1px solid rgba(158, 103, 162, 1);
+            border-radius: 20px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 0 10px rgba(158, 103, 162, 1);
+        }
+
+        .loader:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(158, 103, 162, 1), transparent);
+            animation: load 5s forwards;
+        }
+
+        .loader .fill {
+            position: relative;
+            background-color: #000;
+            height: 100%;
+            width: 0%;
+            z-index: 1;
+        }
+
+        .loader .label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            color: #fff;
+        }
+
+        #startButton {
+            display: none;
+            width: 200px;
+            height: 60px;
+            border: 1px solid rgba(158, 103, 162, 1);
+            border-radius: 30px;
+            background-color: #000;
+            color: #fff;
+            font-size: 24px;
+            line-height: 60px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(158, 103, 162, 1);
+            text-align: center;
+            transition: background 0.5s;
+        }
+
+        #startButton:hover {
+            background-color: rgba(158, 103, 162, 1);
+            color: #000;
+        }
+
+        @keyframes load {
+            0% {
+                transform: translateX(-100%);
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="fill" id="fill"></div>
+        <div class="label" id="label">0%</div>
+    </div>
+    <div id="startButton" onclick="goToQuiz()">Start</div>
+    <script>
+        function startLoading() {
+            var loader = document.getElementById("loader");
+            var element = document.getElementById("fill");
+            var label = document.getElementById("label");
+            var startButton = document.getElementById("startButton");
+            var width = 0;
+            var interval = setInterval(frame, 50); // Updated to make the progress from 0 to 100 in 5 seconds.
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    loader.style.display = 'none';
+                    startButton.style.display = 'block';
+                } else {
+                    width++; 
+                    element.style.width = width + '%'; 
+                    label.textContent = width + '%';
+                }
+            }
+        }
+
+        function goToQuiz() {
+            window.location.href = "quiz.html";
+        }
+
+        window.onload = startLoading;
+    </script>
+</body>
+</html>
