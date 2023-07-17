@@ -3,8 +3,6 @@
 <head>
     <title>Spieleinstellungen</title>
     <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-
     <style>
         body {
             background-color: #000;
@@ -36,28 +34,29 @@
             font-size: 32px; 
         }
 
-        .settings label, .settings select, .settings input {
+        .settings label, .settings input, .settings select {
             width: 100%;
             margin-bottom: 20px;
             color: #fff;
             font-size: 22px; 
-            padding: 5px;
-            border-radius: 5px;
         }
 
-        .settings select, .settings input {
-            background: #222;
-            border: 1px solid rgba(158, 103, 162, 1);
-            outline: none;
-        }
-
-        .settings select option, .settings input[type="text"] {
-            background: #222;
+        .settings input {
+            background: #000;
             color: #fff;
         }
 
-        .settings a.start-button {
-            display: inline-block;
+        .settings select {
+            background: #000;
+            color: #fff;
+        }
+
+        .settings select option {
+            background: #fff;
+            color: #000;
+        }
+
+        .settings input[type=submit] {
             cursor: pointer;
             background-color: rgba(158, 103, 162, 1);
             color: #000;
@@ -66,11 +65,9 @@
             border-radius: 10px;
             transition: background 0.5s;
             font-size: 24px; 
-            text-decoration: none;
-            text-align: center;
         }
 
-        .settings a.start-button:hover {
+        .settings input[type=submit]:hover {
             background-color: #fff;
             color: #000;
         }
@@ -84,62 +81,85 @@
             width: 45%;
             margin: 2.5%;
         }
-
-        .player-setting input[type=color] {
-            width: auto;
-        }
     </style>
 </head>
 <body>
     <div class="settings">
-        <h1><i class="fas fa-cog"></i> Spieleinstellungen</h1>
-        <div id="settingsForm">
-            <label for="category"><i class="fas fa-list"></i> Kategorie:</label>
-            <select id="category">
+        <h1>Spieleinstellungen</h1>
+        <form id="settingsForm" action="fragen.html">
+            <label for="mainCategory">Hauptkategorie:</label>
+            <select id="mainCategory">
+                <option value="coding">Coding</option>
+                <option value="geschichte">Geschichte</option>
+            </select>
+
+            <label for="subcategory">Unterkategorie:</label>
+            <select id="subcategory">
+                <option value="Javascript">Javascript</option>
+                <option value="Bash">Bash</option>
+                <option value="Python">Python</option>
+            </select>
+
+            <label for="difficulty">Schwierigkeit:</label>
+            <select id="difficulty">
                 <option>Noob</option>
                 <option>Chad</option>
                 <option>GigaChad</option>
                 <option>Mr.Robot</option>
             </select>
 
-            <label for="players"><i class="fas fa-users"></i> Anzahl der Spieler:</label>
-            <select id="players">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-            </select>
+            <label for="players">Anzahl der Spieler:</label>
+            <input type="number" id="players" min="1" max="4">
 
             <div id="playerSettings">
             </div>
 
-            <a href="fragen.html" class="start-button">Spiel starten</a>
-        </div>
+            <input type="submit" value="Spiel starten">
+        </form>
     </div>
     <script>
-        function createPlayerSetting(id) {
-            return `
-                <div class="player-setting">
-                    <label for="name"><i class="fas fa-user"></i> Name Spieler ${id}:</label>
-                    <input type="text" id="name${id}">
-
-                    <label for="icon"><i class="fas fa-image"></i> Icon Spieler ${id}:</label>
-                    <input type="text" id="icon${id}">
-
-                    <label for="color"><i class="fas fa-palette"></i> Farbe Spieler ${id}:</label>
-                    <input type="color" id="color${id}">
-                </div>
-            `;
-        }
-
         document.getElementById('players').addEventListener('change', function() {
             var numPlayers = document.getElementById('players').value;
             var playerSettings = document.getElementById('playerSettings');
             playerSettings.innerHTML = "";
             for (var i = 0; i < numPlayers; i++) {
-                playerSettings.innerHTML += createPlayerSetting(i+1);
+                playerSettings.innerHTML += `
+                    <div class="player-setting">
+                        <label for="name">Name Spieler ${i+1}:</label>
+                        <input type="text" id="name${i+1}">
+                    </div>
+                `;
             }
             playerSettings.style.display = 'flex';
+        });
+
+        document.getElementById('mainCategory').addEventListener('change', function() {
+            var mainCategory = document.getElementById('mainCategory').value;
+            var subcategorySelect = document.getElementById('subcategory');
+
+            // Leert die bisherige Auswahl
+            subcategorySelect.innerHTML = '';
+
+            // Bereitet die neuen Optionen vor
+            let options;
+            if (mainCategory === 'coding') {
+                options = ['Javascript', 'Bash', 'Python'];
+            } else if (mainCategory === 'geschichte') {
+                options = ['Linux', 'Git'];
+            }
+
+            // Fügt die neuen Optionen hinzu
+            options.forEach(option => {
+                const optElement = document.createElement('option');
+                optElement.value = option;
+                optElement.innerText = option;
+                subcategorySelect.appendChild(optElement);
+            });
+        });
+    </script>
+</body>
+</html>
+
         });
     </script>
 </body>
