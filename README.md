@@ -11,8 +11,8 @@ Entwicklungsbranch
 |23.07.12| Projekt-Infrastruktur & Planung |
 |23.07.13| Planung: Design, Flow |
 |23.07.14| Planung: Klassen & Funktionen |
-|23.07.17 Montag | **CODING** |
-|23.07.18| **CODING** |
+|23.07.17 Montag | Spieleinstellungen Seite fertig erstellt|
+|23.07.18| Neue Organisationsstruktur erstellt da nur noch zu zweit |
 |23.07.19| Prototyp steht |
 |23.07.20| Video aufnehmen, Vorbereitung Präsentation |
 |23.07.21| Präsentation ab 9:00 Uhr |
