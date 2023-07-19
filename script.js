@@ -88,14 +88,16 @@ Quiz.prototype.zeigeFeedback = function(text, farbe) {
 }
 
 // Timer-Objekt erstellen
-function Timer(zeit, callback) {
-    this.zeit = zeit;
+function Timer(callback) {
+    this.zeit = 15;  // Setzen Sie die Zeit direkt auf 15 Sekunden
     this.callback = callback;
     this.timerID = null;
 }
 
 // Timer starten
+// Timer starten
 Timer.prototype.start = function() {
+    this.zeit = 15; // Setzen Sie die Zeit hier zurück
     const timerElement = document.getElementById('timer');
     timerElement.innerText = this.zeit;
 
@@ -108,12 +110,24 @@ Timer.prototype.start = function() {
             this.callback();
         }
     }, 1000);
+
 }
 
 // Timer stoppen
 Timer.prototype.stop = function() {
     clearInterval(this.timerID);
 }
+
+// Quiz-Objekt erstellen
+function Quiz(fragen, spielername) {
+    this.fragen = fragen;
+    this.punktestand = 0;
+    this.frageIndex = 0;
+    this.spielername = spielername;
+    this.timer = new Timer(this.zeitAbgelaufen.bind(this));
+}
+
+// Die restlichen Methoden bleiben unverändert...
 
 // Quiz-Spiel starten
 function quizSpielStarten() {
