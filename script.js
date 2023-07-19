@@ -4,7 +4,6 @@ function Frage(text, antworten, korrekteAntwort) {
     this.antworten = antworten;
     this.korrekteAntwort = korrekteAntwort;
 }
-
 // Quiz-Objekt erstellen
 function Quiz(fragen, spielername) {
     this.fragen = fragen;
@@ -12,8 +11,8 @@ function Quiz(fragen, spielername) {
     this.frageIndex = 0;
     this.spielername = spielername;
     this.timer = new Timer(15, this.zeitAbgelaufen.bind(this));
+    this.startZeit = Date.now(); // Hinzufügen von startZeit
 }
-
 // Zeit abgelaufen
 Quiz.prototype.zeitAbgelaufen = function() {
     this.pruefeAntwort('');
@@ -50,10 +49,15 @@ Quiz.prototype.quizBeenden = function() {
     const fragenDiv = document.getElementById('frageText');
     const antwortenDiv = document.getElementById('antworten');
     const feedbackDiv = document.getElementById('feedback');
+    const timerElement = document.getElementById('timer'); // Timer-Element holen
 
+    const vergangeneZeit = Date.now() - this.startZeit;
+    const vergangeneSekunden = Math.floor(vergangeneZeit / 1000);
+
+    timerElement.innerText = ''; // Timer-Element leeren
     fragenDiv.innerText = 'Quiz beendet!';
     antwortenDiv.innerHTML = '';
-    feedbackDiv.innerHTML = `Spieler: ${this.spielername}<br>Dein Punktestand: ${this.punktestand}/${this.fragen.length}`;
+    feedbackDiv.innerHTML = `Spieler: ${this.spielername}<br>Dein Punktestand: ${this.punktestand}/${this.fragen.length}<br>Gesamte Zeit: ${vergangeneSekunden} Sekunden`;
     feedbackDiv.style.color = 'white';
 }
 
@@ -95,7 +99,6 @@ function Timer(callback) {
 }
 
 // Timer starten
-// Timer starten
 Timer.prototype.start = function() {
     this.zeit = 15; // Setzen Sie die Zeit hier zurück
     const timerElement = document.getElementById('timer');
@@ -127,7 +130,6 @@ function Quiz(fragen, spielername) {
     this.timer = new Timer(this.zeitAbgelaufen.bind(this));
 }
 
-// Die restlichen Methoden bleiben unverändert...
 
 // Quiz-Spiel starten
 function quizSpielStarten() {
@@ -227,6 +229,7 @@ function quizSpielStarten() {
         }
 
         const quiz = new Quiz(fragen, spielername);
+        quiz.startZeit = Date.now(); // Startzeit hier setzen
 
         // Fragen zufällig auswählen
         const zufaelligeFragen = fragen.sort(() => Math.random() - 0.5).slice(0, 10);
