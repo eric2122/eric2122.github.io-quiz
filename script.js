@@ -4,15 +4,46 @@ function Frage(text, antworten, korrekteAntwort) {
     this.antworten = antworten;
     this.korrekteAntwort = korrekteAntwort;
 }
+
+// Timer-Objekt erstellen
+function Timer(callback) {
+    this.zeit = 15; // Setzen Sie die Zeit direkt auf 15 Sekunden
+    this.callback = callback;
+    this.timerID = null;
+}
+
+// Timer starten
+Timer.prototype.start = function() {
+    this.zeit = 15; // Setzen Sie die Zeit hier zurück
+    const timerElement = document.getElementById('timer');
+    timerElement.innerText = this.zeit;
+
+    this.timerID = setInterval(() => {
+        this.zeit--;
+        timerElement.innerText = this.zeit;
+
+        if (this.zeit === 0) {
+            this.stop();
+            this.callback();
+        }
+    }, 1000);
+}
+
+// Timer stoppen
+Timer.prototype.stop = function() {
+    clearInterval(this.timerID);
+}
+
 // Quiz-Objekt erstellen
 function Quiz(fragen, spielername) {
     this.fragen = fragen;
     this.punktestand = 0;
     this.frageIndex = 0;
     this.spielername = spielername;
-    this.timer = new Timer(15, this.zeitAbgelaufen.bind(this));
-    this.startZeit = Date.now(); // Hinzufügen von startZeit
+    this.timer = new Timer(this.zeitAbgelaufen.bind(this));
+    this.startZeit = Date.now(); // Startzeit hier setzen
 }
+
 // Zeit abgelaufen
 Quiz.prototype.zeitAbgelaufen = function() {
     this.pruefeAntwort('');
@@ -49,16 +80,29 @@ Quiz.prototype.quizBeenden = function() {
     const fragenDiv = document.getElementById('frageText');
     const antwortenDiv = document.getElementById('antworten');
     const feedbackDiv = document.getElementById('feedback');
-    const timerElement = document.getElementById('timer'); // Timer-Element holen
+    const timerElement = document.getElementById('timer');
 
     const vergangeneZeit = Date.now() - this.startZeit;
     const vergangeneSekunden = Math.floor(vergangeneZeit / 1000);
 
-    timerElement.innerText = ''; // Timer-Element leeren
+    timerElement.innerText = '';
     fragenDiv.innerText = 'Quiz beendet!';
     antwortenDiv.innerHTML = '';
     feedbackDiv.innerHTML = `Spieler: ${this.spielername}<br>Dein Punktestand: ${this.punktestand}/${this.fragen.length}<br>Gesamte Zeit: ${vergangeneSekunden} Sekunden`;
+
+    // Wiederholung-Button hinzufügen
+    const wiederholungButton = this.erstelleWiederholungButton();
+    feedbackDiv.appendChild(wiederholungButton);
+
     feedbackDiv.style.color = 'white';
+}
+
+// Wiederholung-Button erstellen
+Quiz.prototype.erstelleWiederholungButton = function() {
+    const wiederholungButton = document.createElement('button');
+    wiederholungButton.innerText = 'Again';
+    wiederholungButton.addEventListener('click', () => location.reload());
+    return wiederholungButton;
 }
 
 // Frage anzeigen
@@ -90,46 +134,6 @@ Quiz.prototype.zeigeFeedback = function(text, farbe) {
     feedbackDiv.innerText = text;
     feedbackDiv.style.color = farbe;
 }
-
-// Timer-Objekt erstellen
-function Timer(callback) {
-    this.zeit = 15;  // Setzen Sie die Zeit direkt auf 15 Sekunden
-    this.callback = callback;
-    this.timerID = null;
-}
-
-// Timer starten
-Timer.prototype.start = function() {
-    this.zeit = 15; // Setzen Sie die Zeit hier zurück
-    const timerElement = document.getElementById('timer');
-    timerElement.innerText = this.zeit;
-
-    this.timerID = setInterval(() => {
-        this.zeit--;
-        timerElement.innerText = this.zeit;
-
-        if (this.zeit === 0) {
-            this.stop();
-            this.callback();
-        }
-    }, 1000);
-
-}
-
-// Timer stoppen
-Timer.prototype.stop = function() {
-    clearInterval(this.timerID);
-}
-
-// Quiz-Objekt erstellen
-function Quiz(fragen, spielername) {
-    this.fragen = fragen;
-    this.punktestand = 0;
-    this.frageIndex = 0;
-    this.spielername = spielername;
-    this.timer = new Timer(this.zeitAbgelaufen.bind(this));
-}
-
 
 // Quiz-Spiel starten
 function quizSpielStarten() {
