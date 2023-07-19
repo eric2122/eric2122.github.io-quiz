@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Spieleinstellungen</title>
+    <meta charset="UTF-8">
+    <title>Quiz-Spiel</title>
     <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
@@ -13,50 +14,19 @@
             margin: 0;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 18px; 
+            font-size: 18px;
         }
 
-        .settings {
-            position: relative;
-            height: 80%;
-            width: 80%;
-            border: 1px solid rgba(158, 103, 162, 1);
-            border-radius: 20px;
-            overflow: auto;
-            background: #000;
-            box-shadow: 0 0 10px rgba(158, 103, 162, 1);
-            padding: 20px;
-        }
-
-        .settings h1 {
+        .quiz {
             text-align: center;
-            color: #fff;
-            font-size: 32px; 
         }
 
-        .settings label, .settings input, .settings select {
-            width: 100%;
+        .quiz h2 {
+            font-size: 24px;
             margin-bottom: 20px;
-            color: #fff;
-            font-size: 22px; 
         }
 
-        .settings input {
-            background: #000;
-            color: #fff;
-        }
-
-        .settings select {
-            background: #000;
-            color: #fff;
-        }
-
-        .settings select option {
-            background: #fff;
-            color: #000;
-        }
-
-        .settings input[type=submit] {
+        .quiz button {
             cursor: pointer;
             background-color: rgba(158, 103, 162, 1);
             color: #000;
@@ -64,98 +34,47 @@
             padding: 10px;
             border-radius: 10px;
             transition: background 0.5s;
-            font-size: 24px; 
+            font-size: 18px;
+            margin-bottom: 10px;
         }
 
-        .settings input[type=submit]:hover {
+        .quiz button:hover {
             background-color: #fff;
             color: #000;
         }
 
-        #playerSettings {
-            display: none;
-            flex-wrap: wrap;
+        .quiz button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
-        .player-setting {
-            width: 45%;
-            margin: 2.5%;
+        .timer {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #feedback {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        #spielername {
+            margin-bottom: 10px;
+            width: 300px;
+            padding: 10px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="settings">
-        <h1>Spieleinstellungen</h1>
-        <form id="settingsForm" action="fragen.html">
-            <label for="mainCategory">Hauptkategorie:</label>
-            <select id="mainCategory">
-                <option value="coding">Coding</option>
-                <option value="geschichte">Geschichte</option>
-            </select>
-
-            <label for="subcategory">Unterkategorie:</label>
-            <select id="subcategory">
-                <option value="Javascript">Javascript</option>
-                <option value="Bash">Bash</option>
-                <option value="Python">Python</option>
-            </select>
-
-            <label for="difficulty">Schwierigkeit:</label>
-            <select id="difficulty">
-                <option>Noob</option>
-                <option>Chad</option>
-                <option>GigaChad</option>
-                <option>Mr.Robot</option>
-            </select>
-
-            <label for="players">Anzahl der Spieler:</label>
-            <input type="number" id="players" min="1" max="4">
-
-            <div id="playerSettings">
-            </div>
-
-            <input type="submit" value="Spiel starten">
-        </form>
+    <div class="quiz">
+        <input type="text" id="spielername" placeholder="Spielername">
+        <button id="startButton">Start</button>
+        <h2 id="frageText"></h2>
+        <div id="antworten"></div>
+        <div class="timer" id="timer"></div>
+        <div id="feedback"></div>
     </div>
-    <script>
-        document.getElementById('players').addEventListener('change', function() {
-            var numPlayers = document.getElementById('players').value;
-            var playerSettings = document.getElementById('playerSettings');
-            playerSettings.innerHTML = "";
-            for (var i = 0; i < numPlayers; i++) {
-                playerSettings.innerHTML += `
-                    <div class="player-setting">
-                        <label for="name">Name Spieler ${i+1}:</label>
-                        <input type="text" id="name${i+1}">
-                    </div>
-                `;
-            }
-            playerSettings.style.display = 'flex';
-        });
-
-        document.getElementById('mainCategory').addEventListener('change', function() {
-            var mainCategory = document.getElementById('mainCategory').value;
-            var subcategorySelect = document.getElementById('subcategory');
-
-            // Leert die bisherige Auswahl
-            subcategorySelect.innerHTML = '';
-
-            // Bereitet die neuen Optionen vor
-            let options;
-            if (mainCategory === 'coding') {
-                options = ['Javascript', 'Bash', 'Python'];
-            } else if (mainCategory === 'geschichte') {
-                options = ['Linux', 'Git'];
-            }
-
-            // Fügt die neuen Optionen hinzu
-            options.forEach(option => {
-                const optElement = document.createElement('option');
-                optElement.value = option;
-                optElement.innerText = option;
-                subcategorySelect.appendChild(optElement);
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
