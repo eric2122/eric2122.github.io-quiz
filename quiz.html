@@ -36,6 +36,14 @@ body {
     gap: 10px; /* Abstand zwischen den Antwortbuttons */
 }
 
+#antworten.correct {
+    background-color: lightgreen;
+}
+
+#antworten.wrong {
+    background-color: red;
+}
+
 .quiz button {
     cursor: pointer;
     background-color: rgba(158, 103, 162, 1);
@@ -79,6 +87,10 @@ body {
     font-size: 18px;
 }
 
+.correct-answer {
+    background-color: #00ff00; /* Sie können die gewünschte grüne Farbe einstellen */
+}
+
 /* Media Query für größere Bildschirme */
 @media (min-width: 768px) {
     .quiz {
@@ -89,6 +101,7 @@ body {
         width: 61.8%;  /* Goldener Schnitt von 100% */
     }
 }
+
 
     </style>
 </head>

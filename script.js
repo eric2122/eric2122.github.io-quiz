@@ -7,14 +7,14 @@ function Frage(text, antworten, korrekteAntwort) {
 
 // Timer-Objekt erstellen
 function Timer(callback) {
-    this.zeit = 15; // Setzen Sie die Zeit direkt auf 15 Sekunden
+    this.zeit = 15;
     this.callback = callback;
     this.timerID = null;
 }
 
 // Timer starten
 Timer.prototype.start = function() {
-    this.zeit = 15; // Setzen Sie die Zeit hier zurück
+    this.zeit = 15;
     const timerElement = document.getElementById('timer');
     timerElement.innerText = this.zeit;
 
@@ -41,7 +41,7 @@ function Quiz(fragen, spielername) {
     this.frageIndex = 0;
     this.spielername = spielername;
     this.timer = new Timer(this.zeitAbgelaufen.bind(this));
-    this.startZeit = Date.now(); // Startzeit hier setzen
+    this.startZeit = Date.now();
 }
 
 // Zeit abgelaufen
@@ -56,15 +56,20 @@ Quiz.prototype.pruefeAntwort = function(antwort) {
     if (antwort === frage.korrekteAntwort) {
         this.punktestand++;
         this.zeigeFeedback('Richtig!', 'green');
+        this.highlightAntwort(true);
     } else {
         this.zeigeFeedback('Falsch!', 'red');
+        this.highlightAntwort(false);
     }
 
-    this.naechsteFrage();
+    setTimeout(() => this.naechsteFrage(), 1000);
 }
 
 // Nächste Frage laden
 Quiz.prototype.naechsteFrage = function() {
+    const antwortenDiv = document.getElementById('antworten');
+    antwortenDiv.style.backgroundColor = '';  // Reset color
+
     this.frageIndex++;
     if (this.frageIndex < this.fragen.length) {
         this.timer.stop();
@@ -73,6 +78,12 @@ Quiz.prototype.naechsteFrage = function() {
     } else {
         this.quizBeenden();
     }
+}
+
+// Antwort hervorheben
+Quiz.prototype.highlightAntwort = function(istRichtig) {
+    const antwortenDiv = document.getElementById('antworten');
+    antwortenDiv.style.backgroundColor = istRichtig ? 'lightgreen' : 'red';
 }
 
 // Quiz beenden
@@ -90,7 +101,6 @@ Quiz.prototype.quizBeenden = function() {
     antwortenDiv.innerHTML = '';
     feedbackDiv.innerHTML = `Spieler: ${this.spielername}<br>Dein Punktestand: ${this.punktestand}/${this.fragen.length}<br>Gesamte Zeit: ${vergangeneSekunden} Sekunden`;
 
-    // Wiederholung-Button hinzufügen
     const wiederholungButton = this.erstelleWiederholungButton();
     feedbackDiv.appendChild(wiederholungButton);
 
@@ -100,7 +110,7 @@ Quiz.prototype.quizBeenden = function() {
 // Wiederholung-Button erstellen
 Quiz.prototype.erstelleWiederholungButton = function() {
     const wiederholungButton = document.createElement('button');
-    wiederholungButton.innerText = 'Again';
+    wiederholungButton.innerText = 'Nochmal';
     wiederholungButton.addEventListener('click', () => quizSpielStarten(this.spielername));
     return wiederholungButton;
 }
@@ -115,9 +125,9 @@ Quiz.prototype.zeigeFrage = function() {
     fragenDiv.innerText = frage.text;
     antwortenDiv.innerHTML = '';
 
-    frage.antworten.forEach((antwort) => {
+    frage.antworten.forEach((antwort, index) => {
         const antwortButton = document.createElement('button');
-        antwortButton.innerText = antwort;
+        antwortButton.innerText = `${index+1}. ${antwort}`;
         antwortButton.addEventListener('click', () => {
             this.timer.stop();
             this.pruefeAntwort(antwort);
@@ -138,6 +148,50 @@ Quiz.prototype.zeigeFeedback = function(text, farbe) {
 // Quiz-Spiel starten
 function quizSpielStarten(spielername) {
     const fragen = [
+        new Frage("Welches Unternehmen brachte den ersten personalisierten Computer auf den Markt?", ["IBM", "Apple", "Microsoft", "HP"], "IBM"),
+        new Frage("Wer gilt allgemein als der 'Vater des Computers'?", ["John Atanasoff", "Alan Turing", "Charles Babbage", "John von Neumann"], "Charles Babbage"),
+        new Frage("Wer ist der Gründer von Microsoft?", ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Larry Page"], "Bill Gates"),
+        new Frage("Was ist das am weitesten verbreitete Betriebssystem für Personal Computer?", ["Linux", "macOS", "Windows", "Unix"], "Windows"),
+        new Frage("Welches Unternehmen entwickelte den ersten Computer-Mausprototyp?", ["IBM", "Apple", "Xerox", "Microsoft"], "Xerox"),
+        new Frage("In welchem Jahr wurde das World Wide Web (www) eingeführt?", ["1980", "1989", "1995", "2000"], "1989"),
+        new Frage("Was bedeutet die Abkürzung 'URL'?", ["Uniform Resource Locator", "Universal Resource Locator", "Unified Retrieval Language", "Universal Retrieval Locator"], "Uniform Resource Locator"),
+        new Frage("Welche Programmiersprache wurde zuerst entwickelt?", ["C", "Python", "FORTRAN", "Java"], "FORTRAN"),
+        new Frage("Wer hat das Linux-Betriebssystem erstellt?", ["Linus Torvalds", "Steve Jobs", "Bill Gates", "Dennis Ritchie"], "Linus Torvalds"),
+        new Frage("Welche Programmiersprache wird hauptsächlich zur Entwicklung von iOS-Anwendungen verwendet?", ["Objective-C", "Swift", "Python", "Java"], "Swift"),
+        new Frage("Welche Datenstruktur folgt dem Last-In-First-Out-Prinzip (LIFO)?", ["Queue", "Array", "Stack", "Linked List"], "Stack"),
+        new Frage("Was ist die maximale Länge einer IPv4-Adresse?", ["32 bit", "128 bit", "256 bit", "512 bit"], "32 bit"),
+        new Frage("Was ist der Standard-Port für HTTP?", ["80", "8080", "443", "22"], "80"),
+        new Frage("Was bedeutet die Abkürzung 'SQL'?", ["Structured Query Language", "Sequential Query Language", "Structured Queue Language", "Simple Query Language"], "Structured Query Language"),
+        new Frage("Welches Protokoll wird zur Übertragung von Webseiten von Webservern zu Webbrowsern verwendet?", ["FTP", "SMTP", "HTTP", "SSH"], "HTTP"),
+        new Frage("Welche Sprache wird üblicherweise für die Gestaltung von Webseiten verwendet?", ["Java", "Python", "HTML", "Swift"], "HTML"),
+        new Frage("In welchem Jahr wurde der erste iPhone von Apple vorgestellt?", ["2005", "2007", "2010", "2012"], "2007"),
+        new Frage("Wer hat das World Wide Web (www) entwickelt?", ["Bill Gates", "Vint Cerf", "Tim Berners-Lee", "Robert E. Kahn"], "Tim Berners-Lee"),
+        new Frage("Welche Sprache wird hauptsächlich verwendet, um das Verhalten von Webseiten zu steuern?", ["JavaScript", "Python", "Java", "Swift"], "JavaScript"),
+        new Frage("In welchem Jahr wurde der erste MacBook Pro veröffentlicht?", ["2003", "2006", "2010", "2015"], "2006"),
+        new Frage("Welches Unternehmen brachte den ersten personalisierten Computer auf den Markt?", ["IBM", "Apple", "Microsoft", "HP"], "IBM"),
+        new Frage("Wer gilt allgemein als der 'Vater des Computers'?", ["John Atanasoff", "Alan Turing", "Charles Babbage", "John von Neumann"], "Charles Babbage"),
+        new Frage("Wer ist der Gründer von Microsoft?", ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Larry Page"], "Bill Gates"),
+        new Frage("Was ist das am weitesten verbreitete Betriebssystem für Personal Computer?", ["Linux", "macOS", "Windows", "Unix"], "Windows"),
+        new Frage("Welches Unternehmen entwickelte den ersten Computer-Mausprototyp?", ["IBM", "Apple", "Xerox", "Microsoft"], "Xerox"),
+        new Frage("In welchem Jahr wurde das World Wide Web (www) eingeführt?", ["1980", "1989", "1995", "2000"], "1989"),
+        new Frage("Was bedeutet die Abkürzung 'URL'?", ["Uniform Resource Locator", "Universal Resource Locator", "Unified Retrieval Language", "Universal Retrieval Locator"], "Uniform Resource Locator"),
+        new Frage("Welche Programmiersprache wurde zuerst entwickelt?", ["C", "Python", "FORTRAN", "Java"], "FORTRAN"),
+        new Frage("Wer hat das Linux-Betriebssystem erstellt?", ["Linus Torvalds", "Steve Jobs", "Bill Gates", "Dennis Ritchie"], "Linus Torvalds"),
+        new Frage("Welche Programmiersprache wird hauptsächlich zur Entwicklung von iOS-Anwendungen verwendet?", ["Objective-C", "Swift", "Python", "Java"], "Swift"),
+        new Frage("Welche Datenstruktur folgt dem Last-In-First-Out-Prinzip (LIFO)?", ["Queue", "Array", "Stack", "Linked List"], "Stack"),
+        new Frage("Was ist die maximale Länge einer IPv4-Adresse?", ["32 bit", "128 bit", "256 bit", "512 bit"], "32 bit"),
+        new Frage("Was ist der Standard-Port für HTTP?", ["80", "8080", "443", "22"], "80"),
+        new Frage("Was bedeutet die Abkürzung 'SQL'?", ["Structured Query Language", "Sequential Query Language", "Structured Queue Language", "Simple Query Language"], "Structured Query Language"),
+        new Frage("Welches Protokoll wird zur Übertragung von Webseiten von Webservern zu Webbrowsern verwendet?", ["FTP", "SMTP", "HTTP", "SSH"], "HTTP"),
+        new Frage("Welche Sprache wird üblicherweise für die Gestaltung von Webseiten verwendet?", ["Java", "Python", "HTML", "Swift"], "HTML"),
+        new Frage("In welchem Jahr wurde der erste iPhone von Apple vorgestellt?", ["2005", "2007", "2010", "2012"], "2007"),
+        new Frage("Wer hat das World Wide Web (www) entwickelt?", ["Bill Gates", "Vint Cerf", "Tim Berners-Lee", "Robert E. Kahn"], "Tim Berners-Lee"),
+        new Frage("Welche Sprache wird hauptsächlich verwendet, um das Verhalten von Webseiten zu steuern?", ["JavaScript", "Python", "Java", "Swift"], "JavaScript"),
+        new Frage("In welchem Jahr wurde der erste MacBook Pro veröffentlicht?", ["2003", "2006", "2010", "2015"], "2006"),
+        new Frage("Wann wurde der erste Computer entwickelt?", ["1945", "1950", "1960", "1970"], "1945"),
+        new Frage("Welches Unternehmen brachte den ersten personalisierten Computer auf den Markt?", ["IBM", "Apple", "Microsoft", "HP"], "IBM"),
+        new Frage("Welches war der erste kommerzielle Computer?", ["ENIAC", "UNIVAC", "EDVAC", "IBM 650"], "UNIVAC"),
+        new Frage("Wer gilt als der Vater des Computers?", ["Charles Babbage", "Alan Turing", "Steve Jobs", "Bill Gates"], "Charles Babbage"),
         new Frage("Wann wurde der erste Computer entwickelt?", ["1945", "1950", "1960", "1970"], "1945"),
         new Frage("Welches Unternehmen brachte den ersten personalisierten Computer auf den Markt?", ["IBM", "Apple", "Microsoft", "HP"], "IBM"),
         new Frage("Welches war der erste kommerzielle Computer?", ["ENIAC", "UNIVAC", "EDVAC", "IBM 650"], "UNIVAC"),
@@ -197,96 +251,13 @@ function quizSpielStarten(spielername) {
         new Frage("Wer hat das erste Breitband-Internet entwickelt?", ["Robert E. Kahn und Vint Cerf", "Tim Berners-Lee", "Larry Page und Sergey Brin", "Bill Gates"], "Robert E. Kahn und Vint Cerf"),
         new Frage("Wann wurde das erste Echtzeitbetriebssystem entwickelt?", ["1950", "1960", "1970", "1980"], "1960"),
         new Frage("Welches war das erste kommerzielle Spracherkennungssystem?", ["IBM Shoebox", "Siri", "Alexa", "Google Assistant"], "IBM Shoebox"),
-        new Frage("Wer hat den ersten Computer für den Heimgebrauch entwickelt?", ["Steve Jobs und Steve Wozniak", "Bill Gates und Paul Allen", "Larry Page und Sergey Brin", "Mark Zuckerberg und Eduardo Saverin"], "Steve Jobs und Steve Wozniak"),
-        new Frage("Was ist HTML?", ["Eine Programmiersprache", "Ein Texteditor", "Eine Bildbearbeitungssoftware", "Eine Auszeichnungssprache"], "Eine Auszeichnungssprache"),
-        new Frage("Welche Sprache wird hauptsächlich für die Frontend-Entwicklung verwendet?", ["Java", "Python", "HTML", "CSS"], "HTML"),
-        new Frage("Was ist CSS?", ["Eine Datenbank", "Ein Framework", "Ein Styling-Sprache", "Ein Betriebssystem"], "Ein Styling-Sprache"),
-        new Frage("Was bedeutet die Abkürzung 'HTTP'?", ["HyperText Transfer Protocol", "High Tech Programming", "Home Tool Programming", "HyperText Technical Protocol"], "HyperText Transfer Protocol"),
-        new Frage("Was ist JavaScript?", ["Eine Datenbank", "Ein Betriebssystem", "Eine Programmiersprache", "Ein Texteditor"], "Eine Programmiersprache"),
-        new Frage("Was ist eine Variable in der Programmierung?", ["Ein Speicherplatz für Daten", "Ein Computer-Netzwerk", "Ein spezielles Symbol", "Eine Programmiersprache"], "Ein Speicherplatz für Daten"),
-        new Frage("Was bedeutet 'SQL'?", ["Structured Query Language", "Standard Question Language", "Simple Query Language", "Structured Question Language"], "Structured Query Language"),
-        new Frage("Was ist ein Server?", ["Ein spezieller Computer", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein spezielles Kabel"], "Ein spezieller Computer"),
-        new Frage("Was ist ein Algorithmus?", ["Ein spezieller Code", "Ein Musikinstrument", "Eine Programmiersprache", "Eine Schritt-für-Schritt-Anleitung"], "Eine Schritt-für-Schritt-Anleitung"),
-        new Frage("Was bedeutet 'API'?", ["Application Program Interface", "Advanced Programming Interface", "Application Personal Interface", "Advanced Program Interface"], "Application Program Interface"),
-        new Frage("Was ist ein Framework?", ["Ein Programmierwerkzeug", "Ein Datenformat", "Eine Musikband", "Ein Programmierfehler"], "Ein Programmierwerkzeug"),
-        new Frage("Was ist ein Repository in der Versionsverwaltung?", ["Ein spezieller Computer", "Ein Speichermedium", "Ein Speicherplatz für Daten", "Ein Programmierwerkzeug"], "Ein Speicherplatz für Daten"),
-        new Frage("Was ist ein Debugger?", ["Ein Fehler in einem Programm", "Ein Musikinstrument", "Ein Programmierfehler", "Ein Programmierwerkzeug"], "Ein Programmierwerkzeug"),
-        new Frage("Was ist ein Protokoll in der Netzwerktechnik?", ["Eine Programmiersprache", "Eine Verbindungsmethode", "Ein Texteditor", "Ein Fehler in einem Programm"], "Eine Verbindungsmethode"),
-        new Frage("Was ist eine Firewall?", ["Ein Musikinstrument", "Ein Programmierfehler", "Ein Sicherheitsmechanismus", "Ein Datenformat"], "Ein Sicherheitsmechanismus"),
-        new Frage("Was ist ein Router?", ["Ein spezieller Computer", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein Netzwerkgerät"], "Ein Netzwerkgerät"),
-        new Frage("Was ist ein Cache?", ["Ein Speicherplatz für Daten", "Ein Programmierfehler", "Ein Fehler in einem Programm", "Ein Datenformat"], "Ein Speicherplatz für Daten"),
-        new Frage("Was ist eine Schnittstelle?", ["Eine Verbindungsmethode", "Ein Musikinstrument", "Ein Texteditor", "Ein Fehler in einem Programm"], "Eine Verbindungsmethode"),
-        new Frage("Was ist ein Byte?", ["Eine Einheit für Daten", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein Netzwerkgerät"], "Eine Einheit für Daten"),
-        new Frage("Was ist ein Compiler?", ["Ein Musikinstrument", "Ein Programmierfehler", "Ein Übersetzungswerkzeug", "Ein Datenformat"], "Ein Übersetzungswerkzeug"),
-        new Frage("Was ist ein Betriebssystem?", ["Eine Software für Systemadministratoren", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Eine Systemsoftware"], "Eine Systemsoftware"),
-        new Frage("Was ist ein Algorithmus?", ["Ein spezieller Code", "Ein Musikinstrument", "Eine Programmiersprache", "Eine Schritt-für-Schritt-Anleitung"], "Eine Schritt-für-Schritt-Anleitung"),
-        new Frage("Was ist eine Schleife in der Programmierung?", ["Ein Kontrollstrukturelement", "Ein Musikinstrument", "Ein Programmierwerkzeug", "Ein Fehler in einem Programm"], "Ein Kontrollstrukturelement"),
-        new Frage("Was ist ein DNS?", ["Domain Name System", "Data Network Server", "Data Network System", "Domain Network System"], "Domain Name System"),
-        new Frage("Was ist ein Datenbankmanagementsystem (DBMS)?", ["Eine Software zur Verwaltung von Datenbanken", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein Datenformat"], "Eine Software zur Verwaltung von Datenbanken"),
-        new Frage("Was ist ein VPN?", ["Virtual Private Network", "Virtual Public Network", "Virtual Personal Network", "Virtual Program Network"], "Virtual Private Network"),
-        new Frage("Was ist eine URL?", ["Uniform Resource Locator", "Unified Resource Locator", "Uniform Remote Locator", "Unified Remote Locator"], "Uniform Resource Locator"),
-        new Frage("Was ist ein Stack in der Programmierung?", ["Ein Datenstrukturtyp", "Ein Musikinstrument", "Ein Programmierwerkzeug", "Ein Fehler in einem Programm"], "Ein Datenstrukturtyp"),
-        new Frage("Was ist ein JSON?", ["Ein Datenformat", "Ein Musikinstrument", "Eine Programmiersprache", "Ein Texteditor"], "Ein Datenformat"),
-        new Frage("Was ist ein Framework?", ["Ein Programmierwerkzeug", "Ein Datenformat", "Eine Musikband", "Ein Programmierfehler"], "Ein Programmierwerkzeug"),
-        new Frage("Was ist ein SSL-Zertifikat?", ["Ein Verschlüsselungszertifikat für sichere Kommunikation im Web", "Ein Netzwerkprotokoll für die Datenübertragung", "Ein Framework zur Entwicklung von Websites", "Ein Speichermedium für Daten"], "Ein Verschlüsselungszertifikat für sichere Kommunikation im Web"),
-        new Frage("Was ist ein API-Schlüssel?", ["Ein geheimes Passwort für den Zugriff auf eine API", "Ein Programmierwerkzeug für die API-Entwicklung", "Ein eindeutiger Identifikator für eine API", "Ein Datenbankobjekt für die API-Kommunikation"], "Ein geheimes Passwort für den Zugriff auf eine API"),
-        new Frage("Was bedeutet die Abkürzung 'URL'?", ["Unified Resource Locator", "Universal Remote Link", "Unique Routing Language", "Uniform Resource Link"], "Unified Resource Locator"),
-        new Frage("Was ist eine DNS-Auflösung?", ["Die Übersetzung einer Domain in eine IP-Adresse", "Die Verschlüsselung von Daten bei der Übertragung", "Die Verbindung zu einem VPN-Netzwerk", "Die Verwaltung von Datenbanken in einem DBMS"], "Die Übersetzung einer Domain in eine IP-Adresse"),
-        new Frage("Was ist ein Open-Source-Projekt?", ["Ein Softwareprojekt mit öffentlich zugänglichem Quellcode", "Ein Projekt zur Netzwerksicherheit", "Ein Datenbankmanagementsystem mit freier Lizenz", "Ein Framework zur Datenvisualisierung"], "Ein Softwareprojekt mit öffentlich zugänglichem Quellcode"),
-        new Frage("Was ist ein HTML-Tag?", ["Ein spezielles Element in der HTML-Struktur", "Ein Programmierwerkzeug zur HTML-Entwicklung", "Ein Link zu einer anderen HTML-Seite", "Ein CSS-Stylingattribut"], "Ein spezielles Element in der HTML-Struktur"),
-        new Frage("Was ist ein VPN?", ["Virtual Private Network", "Virtual Public Network", "Virtual Personal Network", "Virtual Program Network"], "Virtual Private Network"),
-        new Frage("Was ist ein Versionskontrollsystem?", ["Ein Tool zur Verwaltung von Änderungen im Quellcode", "Ein Framework zur Versionsverwaltung von Dateien", "Ein Verschlüsselungsprotokoll für die Datenübertragung", "Ein Datenbankmanagementsystem für die Code-Dokumentation"], "Ein Tool zur Verwaltung von Änderungen im Quellcode"),
-        new Frage("Was ist Responsive Webdesign?", ["Ein Ansatz zur Entwicklung von Websites, die auf verschiedenen Geräten gut aussehen", "Ein Algorithmus zur Website-Optimierung", "Ein Framework zur automatischen Generierung von Webseiten", "Ein Datenformat für die Webseitenstruktur"], "Ein Ansatz zur Entwicklung von Websites, die auf verschiedenen Geräten gut aussehen"),
-        new Frage("Was ist ein SQL-Injection-Angriff?", ["Ein Angriff, bei dem schädlicher Code in SQL-Abfragen eingefügt wird", "Ein Fehler im Datenbankmanagementsystem", "Ein Algorithmus zur Datenmanipulation", "Ein Datenbankobjekt zur SQL-Integration"], "Ein Angriff, bei dem schädlicher Code in SQL-Abfragen eingefügt wird"),
-        new Frage("Was ist ein Framework?", ["Ein Programmierwerkzeug zur Entwicklung von Anwendungen", "Ein spezielles Datenbankobjekt", "Ein Netzwerkprotokoll für die Datenübertragung", "Ein Speichermedium für Programmiercode"], "Ein Programmierwerkzeug zur Entwicklung von Anwendungen"),
-        new Frage("Was ist ein Algorithmus?", ["Eine Schritt-für-Schritt-Anleitung zur Lösung eines Problems", "Ein Datenbankobjekt zur Algorithmusoptimierung", "Ein Framework zur Algorithmenentwicklung", "Ein spezielles Element in der Programmiersprache"], "Eine Schritt-für-Schritt-Anleitung zur Lösung eines Problems"),
-        new Frage("Was ist Cloud Computing?", ["Die Bereitstellung von Computing-Ressourcen über das Internet", "Ein spezielles Datenbankmanagementsystem", "Ein Framework zur Cloud-Entwicklung", "Ein Algorithmus zur Cloud-Optimierung"], "Die Bereitstellung von Computing-Ressourcen über das Internet"),
-        new Frage("Was ist eine API?", ["Eine Programmierschnittstelle für die Kommunikation zwischen Anwendungen", "Ein Datenbankmanagementsystem für die API-Integration", "Ein Framework zur API-Entwicklung", "Ein spezielles Datenformat für die API-Kommunikation"], "Eine Programmierschnittstelle für die Kommunikation zwischen Anwendungen"),
-        new Frage("Was ist ein Stack Overflow?", ["Eine Online-Community für Fragen und Antworten zu Programmierthemen", "Ein Fehler im Datenbankmanagementsystem", "Ein Algorithmus zur Datenmanipulation", "Ein Datenbankobjekt zur Datenintegration"], "Eine Online-Community für Fragen und Antworten zu Programmierthemen"),
-        new Frage("Was ist ein Bug?", ["Ein Fehler in einem Programm", "Ein Framework zur Programmierung", "Ein Speichermedium für Programmiercode", "Ein Algorithmus zur Fehlerbehebung"], "Ein Fehler in einem Programm"),
-        new Frage("Was ist ein Datenbankmanagementsystem (DBMS)?", ["Eine Software zur Verwaltung von Datenbanken", "Ein Programmierwerkzeug für Datenanalyse", "Ein Algorithmus zur Datenmanipulation", "Ein Datenformat für Datenbankstrukturen"], "Eine Software zur Verwaltung von Datenbanken"),
-        new Frage("Was ist eine IDE?", ["Eine integrierte Entwicklungsumgebung für die Programmierung", "Ein Algorithmus zur Code-Optimierung", "Ein Framework zur IDE-Entwicklung", "Ein spezielles Datenbankobjekt für die Code-Integration"], "Eine integrierte Entwicklungsumgebung für die Programmierung"),
-        new Frage("Was ist ein Compiler?", ["Ein Programmierwerkzeug zur Übersetzung von Quellcode", "Ein Datenbankmanagementsystem für die Code-Integration", "Ein Algorithmus zur Compiler-Optimierung", "Ein Framework zur Compiler-Entwicklung"], "Ein Programmierwerkzeug zur Übersetzung von Quellcode"),
-        new Frage("Was ist ein Stack in der Programmierung?", ["Eine Datenstruktur zur Speicherung von Elementen", "Ein spezielles Datenbankmanagementsystem", "Ein Framework zur Stack-Entwicklung", "Ein Algorithmus zur Stack-Optimierung"], "Eine Datenstruktur zur Speicherung von Elementen"),
-        new Frage("Was ist HTML?", ["Eine Programmiersprache", "Ein Texteditor", "Eine Bildbearbeitungssoftware", "Eine Auszeichnungssprache"], "Eine Auszeichnungssprache"),
-        new Frage("Welche Sprache wird hauptsächlich für die Frontend-Entwicklung verwendet?", ["Java", "Python", "HTML", "CSS"], "HTML"),
-        new Frage("Was ist CSS?", ["Eine Datenbank", "Ein Framework", "Ein Styling-Sprache", "Ein Betriebssystem"], "Ein Styling-Sprache"),
-        new Frage("Was bedeutet die Abkürzung 'HTTP'?", ["HyperText Transfer Protocol", "High Tech Programming", "Home Tool Programming", "HyperText Technical Protocol"], "HyperText Transfer Protocol"),
-        new Frage("Was ist JavaScript?", ["Eine Datenbank", "Ein Betriebssystem", "Eine Programmiersprache", "Ein Texteditor"], "Eine Programmiersprache"),
-        new Frage("Was ist eine Variable in der Programmierung?", ["Ein Speicherplatz für Daten", "Ein Computer-Netzwerk", "Ein spezielles Symbol", "Eine Programmiersprache"], "Ein Speicherplatz für Daten"),
-        new Frage("Was bedeutet 'SQL'?", ["Structured Query Language", "Standard Question Language", "Simple Query Language", "Structured Question Language"], "Structured Query Language"),
-        new Frage("Was ist ein Server?", ["Ein spezieller Computer", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein spezielles Kabel"], "Ein spezieller Computer"),
-        new Frage("Was ist ein Algorithmus?", ["Ein spezieller Code", "Ein Musikinstrument", "Eine Programmiersprache", "Eine Schritt-für-Schritt-Anleitung"], "Eine Schritt-für-Schritt-Anleitung"),
-        new Frage("Was bedeutet 'API'?", ["Application Program Interface", "Advanced Programming Interface", "Application Personal Interface", "Advanced Program Interface"], "Application Program Interface"),
-        new Frage("Was ist ein Framework?", ["Ein Programmierwerkzeug", "Ein Datenformat", "Eine Musikband", "Ein Programmierfehler"], "Ein Programmierwerkzeug"),
-        new Frage("Was ist ein Repository in der Versionsverwaltung?", ["Ein spezieller Computer", "Ein Speichermedium", "Ein Speicherplatz für Daten", "Ein Programmierwerkzeug"], "Ein Speicherplatz für Daten"),
-        new Frage("Was ist ein Debugger?", ["Ein Fehler in einem Programm", "Ein Musikinstrument", "Ein Programmierfehler", "Ein Programmierwerkzeug"], "Ein Programmierwerkzeug"),
-        new Frage("Was ist ein Protokoll in der Netzwerktechnik?", ["Eine Programmiersprache", "Eine Verbindungsmethode", "Ein Texteditor", "Ein Fehler in einem Programm"], "Eine Verbindungsmethode"),
-        new Frage("Was ist eine Firewall?", ["Ein Musikinstrument", "Ein Programmierfehler", "Ein Sicherheitsmechanismus", "Ein Datenformat"], "Ein Sicherheitsmechanismus"),
-        new Frage("Was ist ein Router?", ["Ein spezieller Computer", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein Netzwerkgerät"], "Ein Netzwerkgerät"),
-        new Frage("Was ist ein Cache?", ["Ein Speicherplatz für Daten", "Ein Programmierfehler", "Ein Fehler in einem Programm", "Ein Datenformat"], "Ein Speicherplatz für Daten"),
-        new Frage("Was ist eine Schnittstelle?", ["Eine Verbindungsmethode", "Ein Musikinstrument", "Ein Texteditor", "Ein Fehler in einem Programm"], "Eine Verbindungsmethode"),
-        new Frage("Was ist ein Byte?", ["Eine Einheit für Daten", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein Netzwerkgerät"], "Eine Einheit für Daten"),
-        new Frage("Was ist ein Compiler?", ["Ein Musikinstrument", "Ein Programmierfehler", "Ein Übersetzungswerkzeug", "Ein Datenformat"], "Ein Übersetzungswerkzeug"),
-        new Frage("Was ist ein Betriebssystem?", ["Eine Software für Systemadministratoren", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Eine Systemsoftware"], "Eine Systemsoftware"),
-        new Frage("Was ist ein Algorithmus?", ["Ein spezieller Code", "Ein Musikinstrument", "Eine Programmiersprache", "Eine Schritt-für-Schritt-Anleitung"], "Eine Schritt-für-Schritt-Anleitung"),
-        new Frage("Was ist eine Schleife in der Programmierung?", ["Ein Kontrollstrukturelement", "Ein Musikinstrument", "Ein Programmierwerkzeug", "Ein Fehler in einem Programm"], "Ein Kontrollstrukturelement"),
-        new Frage("Was ist ein DNS?", ["Domain Name System", "Data Network Server", "Data Network System", "Domain Network System"], "Domain Name System"),
-        new Frage("Was ist ein Datenbankmanagementsystem (DBMS)?", ["Eine Software zur Verwaltung von Datenbanken", "Ein Programmierwerkzeug", "Ein Musik-Streaming-Dienst", "Ein Datenformat"], "Eine Software zur Verwaltung von Datenbanken"),
-        new Frage("Was ist ein VPN?", ["Virtual Private Network", "Virtual Public Network", "Virtual Personal Network", "Virtual Program Network"], "Virtual Private Network"),
-        new Frage("Was ist eine URL?", ["Uniform Resource Locator", "Unified Resource Locator", "Uniform Remote Locator", "Unified Remote Locator"], "Uniform Resource Locator"),
-        new Frage("Was ist ein Stack in der Programmierung?", ["Ein Datenstrukturtyp", "Ein Musikinstrument", "Ein Programmierwerkzeug", "Ein Fehler in einem Programm"], "Ein Datenstrukturtyp"),
-        new Frage("Was ist ein JSON?", ["Ein Datenformat", "Ein Musikinstrument", "Eine Programmiersprache", "Ein Texteditor"], "Ein Datenformat"),
-        new Frage("Was ist ein Framework?", ["Ein Programmierwerkzeug", "Ein Datenformat", "Eine Musikband", "Ein Programmierfehler"], "Ein Programmierwerkzeug")
+        new Frage("Wer hat den ersten Computer für den Heimgebrauch entwickelt?", ["Steve Jobs und Steve Wozniak", "Bill Gates und Paul Allen", "Larry Page und Sergey Brin", "Mark Zuckerberg und Eduardo Saverin"], "Steve Jobs und Steve Wozniak")
+    
     ];
-
-    // Fragen zufällig auswählen
+    
     const zufaelligeFragen = fragen.sort(() => Math.random() - 0.5).slice(0, 10);
-
     const quiz = new Quiz(zufaelligeFragen, spielername);
-    quiz.startZeit = Date.now(); // Startzeit hier setzen
-
-    // HTML-Elemente für Spielername und Start-Button ausblenden
+    
     document.getElementById('spielername').style.display = 'none';
     document.getElementById('startButton').style.display = 'none';
 
