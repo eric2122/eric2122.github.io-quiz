@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Credits</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            overflow: hidden;
+        }
+
+        .credits {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            animation: creditsAnimation 6s linear infinite;
+        }
+
+        .credits span {
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #fff;
+            animation: colorAnimation 6s linear infinite;
+        }
+
+        .credits-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        @keyframes creditsAnimation {
+            0% {
+                transform: translate(-50%, -30%);
+            }
+            100% {
+                transform: translate(-50%, 100%);
+            }
+        }
+
+        @keyframes colorAnimation {
+            0% {
+                color: #fff;
+            }
+            25% {
+                color: #ff0000;
+            }
+            50% {
+                color: #00ff00;
+            }
+            75% {
+                color: #0000ff;
+            }
+            100% {
+                color: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="credits">
+        <h2 class="credits-heading">CREDITS</h2>
+        <span>Eric Schäfer</span>
+        <span>Emanuel Brandl</span>
+    </div>
+</body>
+</html>
