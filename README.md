@@ -3,7 +3,7 @@ Entwicklungsbranch
 
 ## Links
 - [Figma](https://www.figma.com/file/2BKPjRQVSBAR97niuKhUCq/Quiz-Version-1?type=design&node-id=0-1&mode=design&t=PkKFhdvKvjuMkRe5-0)
-- https://app.diagrams.net/#G1PlNVWRNCE4cJA4M_8aZvmVAdUVwoS1Nq
+- https://tinyurl.com/drawio13
 
 ## Tagebuch
 | Datum | Aufgaben |
