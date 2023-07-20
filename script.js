@@ -101,7 +101,7 @@ Quiz.prototype.quizBeenden = function() {
 Quiz.prototype.erstelleWiederholungButton = function() {
     const wiederholungButton = document.createElement('button');
     wiederholungButton.innerText = 'Again';
-    wiederholungButton.addEventListener('click', () => location.reload());
+    wiederholungButton.addEventListener('click', () => quizSpielStarten(this.spielername));
     return wiederholungButton;
 }
 
@@ -136,7 +136,7 @@ Quiz.prototype.zeigeFeedback = function(text, farbe) {
 }
 
 // Quiz-Spiel starten
-function quizSpielStarten() {
+function quizSpielStarten(spielername) {
     const fragen = [
         new Frage("Was ist HTML?", ["Eine Programmiersprache", "Ein Texteditor", "Eine Bildbearbeitungssoftware", "Eine Auszeichnungssprache"], "Eine Auszeichnungssprache"),
         new Frage("Welche Sprache wird hauptsächlich für die Frontend-Entwicklung verwendet?", ["Java", "Python", "HTML", "CSS"], "HTML"),
@@ -220,33 +220,26 @@ function quizSpielStarten() {
         new Frage("Was ist ein Framework?", ["Ein Programmierwerkzeug", "Ein Datenformat", "Eine Musikband", "Ein Programmierfehler"], "Ein Programmierwerkzeug")
     ];
 
-    const startButton = document.getElementById('startButton');
-    startButton.addEventListener('click', starteQuiz);
+    // Fragen zufällig auswählen
+    const zufaelligeFragen = fragen.sort(() => Math.random() - 0.5).slice(0, 10);
 
-    function starteQuiz() {
-        const spielernameInput = document.getElementById('spielername');
-        const spielername = spielernameInput.value.trim();
+    const quiz = new Quiz(zufaelligeFragen, spielername);
+    quiz.startZeit = Date.now(); // Startzeit hier setzen
 
-        if (spielername === "") {
-            alert("Bitte gib deinen Namen ein, um das Spiel zu starten.");
-            return;
-        }
+    // HTML-Elemente für Spielername und Start-Button ausblenden
+    document.getElementById('spielername').style.display = 'none';
+    document.getElementById('startButton').style.display = 'none';
 
-        const quiz = new Quiz(fragen, spielername);
-        quiz.startZeit = Date.now(); // Startzeit hier setzen
-
-        // Fragen zufällig auswählen
-        const zufaelligeFragen = fragen.sort(() => Math.random() - 0.5).slice(0, 10);
-        quiz.fragen = zufaelligeFragen;
-
-        // HTML-Elemente für Spielername und Start-Button ausblenden
-        spielernameInput.style.display = 'none';
-        startButton.style.display = 'none';
-
-        quiz.zeigeFrage();
-        quiz.timer.start();
-    }
+    quiz.zeigeFrage();
+    quiz.timer.start();
 }
 
 // Spiel starten
-quizSpielStarten();
+document.getElementById('startButton').addEventListener('click', function() {
+    const spielername = document.getElementById('spielername').value.trim();
+    if (spielername === '') {
+        alert('Bitte gib deinen Namen ein');
+    } else {
+        quizSpielStarten(spielername);
+    }
+});

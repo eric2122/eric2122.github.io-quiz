@@ -5,69 +5,91 @@
     <title>Quiz-Spiel</title>
     <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-        }
+body {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+}
 
-        .quiz {
-            text-align: center;
-        }
+.quiz {
+    text-align: center;
+    width: 80%;  /* Anfangsbreite für mobile Geräte */
+    margin: auto;
+}
 
-        .quiz h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+.quiz h2 {
+    font-size: 24px;
+    margin-bottom: 15.5px;  /* Goldener Schnitt von 24px */
+}
 
-        .quiz button {
-            cursor: pointer;
-            background-color: rgba(158, 103, 162, 1);
-            color: #000;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            transition: background 0.5s;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
+#antworten {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Abstand zwischen den Antwortbuttons */
+}
 
-        .quiz button:hover {
-            background-color: #fff;
-            color: #000;
-        }
+.quiz button {
+    cursor: pointer;
+    background-color: rgba(158, 103, 162, 1);
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.5s;
+    font-size: 18px;
+    width: 100%; /* Button nimmt die volle verfügbare Breite ein */
+}
 
-        .quiz button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+.quiz button:hover {
+    background-color: #fff;
+    color: #000;
+}
 
-        .timer {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+.quiz button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
-        #feedback {
-            font-size: 24px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+.timer {
+    font-size: 38.8px;  /* Goldener Schnitt von 24px */
+    margin-bottom: 20px;
+}
 
-        #spielername {
-            margin-bottom: 10px;
-            width: 300px;
-            padding: 10px;
-            font-size: 18px;
-        }
+#feedback {
+    font-size: 24px;
+    margin-top: 15px;  /* Goldener Schnitt von 24px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#spielername {
+    margin-bottom: 10px;
+    width: 100%;  /* Anfangsbreite für mobile Geräte */
+    padding: 10px;
+    font-size: 18px;
+}
+
+/* Media Query für größere Bildschirme */
+@media (min-width: 768px) {
+    .quiz {
+        width: 61.8%;  /* Goldener Schnitt von 100% */
+    }
+
+    #spielername {
+        width: 61.8%;  /* Goldener Schnitt von 100% */
+    }
+}
+
     </style>
 </head>
 <body>
