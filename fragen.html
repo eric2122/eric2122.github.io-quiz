@@ -1,113 +1,13 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="de">
 <head>
-    <title>Star Trek Quiz</title>
-    <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-        }
-        .question {
-            display: none;
-        }
-        .question.active {
-            display: block;
-        }
-        .option {
-            margin: 10px 0;
-            border: 1px solid rgba(158, 103, 162, 1);
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .option:hover {
-            background-color: rgba(158, 103, 162, 1);
-            color: #000;
-        }
-        .correct {
-            background-color: green;
-        }
-        .wrong {
-            background-color: red;
-        }
-        #score {
-            margin-top: 20px;
-        }
-        #nextButton {
-            margin-top: 20px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url=./">
+  <link rel="canonical" href="./">
+  <title>Weiterleitung zum Pferdequiz</title>
 </head>
 <body>
-    <div class="question active" id="question1">
-        <h2>Frage 1: Wer ist der Captain der USS Enterprise in Star Trek: The Original Series?</h2>
-        <div class="option" data-answer="wrong">A) Jean-Luc Picard</div>
-        <div class="option" data-answer="wrong">B) Benjamin Sisko</div>
-        <div class="option" data-answer="wrong">C) Kathryn Janeway</div>
-        <div class="option" data-answer="correct">D) James T. Kirk</div>
-    </div>
-    <div class="question" id="question2">
-        <h2>Frage 2: Ist die Erde in Star Trek flach?</h2>
-        <div class="option" data-answer="wrong">Ja</div>
-        <div class="option" data-answer="correct">Nein</div>
-    </div>
-
-    <div id="score">Score: 0</div>
-    <div id="nextButton">Nächste Frage</div>
-
-    <script>
-        var questions = document.querySelectorAll('.question');
-        var scoreElement = document.getElementById('score');
-        var nextButton = document.getElementById('nextButton');
-        var score = 0;
-        var currentQuestionIndex = 0;
-
-        function checkAnswer(option) {
-            var answer = option.getAttribute('data-answer');
-            if (answer === 'correct') {
-                option.classList.add('correct');
-                score++;
-                scoreElement.innerText = 'Score: ' + score;
-            } else {
-                option.classList.add('wrong');
-            }
-            nextButton.style.display = 'block';
-        }
-
-        function nextQuestion() {
-            questions[currentQuestionIndex].classList.remove('active');
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                questions[currentQuestionIndex].classList.add('active');
-            } else {
-                alert('Quiz beendet! Ihre Punktzahl ist: ' + score);
-            }
-            nextButton.style.display = 'none';
-        }
-
-        questions.forEach(function(question) {
-            var options = question.querySelectorAll('.option');
-            options.forEach(function(option) {
-                option.addEventListener('click', function() {
-                    checkAnswer(this);
-                    options.forEach(function(option) {
-                        option.removeEventListener('click', checkAnswer);
-                    });
-                });
-            });
-        });
-
-        nextButton.addEventListener('click', nextQuestion);
-    </script>
+  <p>Die Fragen sind jetzt Teil des neuen Quiz. <a href="./">Zum Pferdequiz</a></p>
 </body>
 </html>
