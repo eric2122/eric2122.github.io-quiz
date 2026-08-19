@@ -2,7 +2,7 @@
 
 const QUESTION_SECONDS = 20;
 const ROUND_QUESTION_COUNT = 20;
-const FEEDBACK_DELAY_MS = 1350;
+const FEEDBACK_DELAY_MS = 5000;
 const ANSWER_LETTERS = ["A", "B", "C", "D"];
 
 const QUESTION_BANK = Object.freeze([

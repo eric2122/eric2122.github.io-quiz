@@ -270,16 +270,6 @@ h1 em {
   color: var(--forest-900);
 }
 
-.primary-button:hover,
-.secondary-button:hover {
-  transform: translateY(-2px);
-}
-
-.primary-button:hover {
-  background: var(--forest-800);
-  box-shadow: 0 11px 24px rgba(18, 55, 47, 0.23);
-}
-
 .primary-button:active,
 .secondary-button:active {
   transform: translateY(0);
@@ -561,14 +551,6 @@ input:focus-visible {
   transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
 }
 
-.answer-button:hover:not(:disabled) {
-  z-index: 1;
-  border-color: var(--forest-700);
-  background: #f4f8f4;
-  box-shadow: 0 8px 20px rgba(18, 55, 47, 0.08);
-  transform: translateY(-2px);
-}
-
 .answer-button:disabled {
   cursor: default;
 }
@@ -746,6 +728,26 @@ input:focus-visible {
 .site-footer span:last-child {
   color: var(--forest-700);
   font-size: 1.2rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primary-button:hover,
+  .secondary-button:hover {
+    transform: translateY(-2px);
+  }
+
+  .primary-button:hover {
+    background: var(--forest-800);
+    box-shadow: 0 11px 24px rgba(18, 55, 47, 0.23);
+  }
+
+  .answer-button:hover:not(:disabled) {
+    z-index: 1;
+    border-color: var(--forest-700);
+    background: #f4f8f4;
+    box-shadow: 0 8px 20px rgba(18, 55, 47, 0.08);
+    transform: translateY(-2px);
+  }
 }
 
 @media (max-width: 900px) {
