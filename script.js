@@ -3,6 +3,10 @@
 const QUESTION_SECONDS = 20;
 const ROUND_QUESTION_COUNT = 20;
 const FEEDBACK_DELAY_MS = 5000;
+const LEADERBOARD_LIMIT = 5;
+const LEADERBOARD_API_URL = String(
+  window.HufschlagConfig?.leaderboardApiUrl ?? ""
+).replace(/\/+$/, "");
 const ANSWER_LETTERS = ["A", "B", "C", "D"];
 
 const QUESTION_BANK = Object.freeze([
@@ -817,7 +821,8 @@ const state = {
   questionDeadline: 0,
   timerId: null,
   nextQuestionId: null,
-  answerLocked: false
+  answerLocked: false,
+  leaderboardEntries: []
 };
 
 const ui = {};
@@ -856,7 +861,222 @@ function formatTime(totalSeconds) {
 }
 
 function normalizeName(value) {
-  return value.trim().replace(/\s+/g, " ").slice(0, 24);
+  return value.normalize("NFKC").trim().replace(/\s+/gu, " ").slice(0, 24);
+}
+
+function normalizeLeaderboardNameKey(value) {
+  return normalizeName(String(value ?? "")).toLocaleLowerCase("de-DE");
+}
+
+function sanitizeLeaderboardEntries(value) {
+  return (Array.isArray(value) ? value : [])
+    .map((entry) => ({
+      name: normalizeName(String(entry?.name ?? "")),
+      score: Number(entry?.score),
+      elapsedSeconds: Number(entry?.elapsedSeconds)
+    }))
+    .filter((entry) => (
+      entry.name
+      && Number.isInteger(entry.score)
+      && entry.score >= 0
+      && entry.score <= ROUND_QUESTION_COUNT
+      && Number.isInteger(entry.elapsedSeconds)
+      && entry.elapsedSeconds >= 0
+      && entry.elapsedSeconds <= 3600
+    ))
+    .sort((first, second) => (
+      second.score - first.score
+      || first.elapsedSeconds - second.elapsedSeconds
+      || first.name.localeCompare(second.name, "de")
+    ))
+    .slice(0, LEADERBOARD_LIMIT);
+}
+
+function createLeaderboardCell(className, text) {
+  const cell = document.createElement("td");
+  cell.className = className;
+  cell.textContent = text;
+  return cell;
+}
+
+function renderLeaderboardTable(tableBody, entries, highlightName = "") {
+  tableBody.replaceChildren();
+
+  if (entries.length === 0) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    row.className = "leaderboard-placeholder";
+    cell.colSpan = 4;
+    cell.textContent = "Noch keine Ergebnisse – hol dir den ersten Platz!";
+    row.appendChild(cell);
+    tableBody.appendChild(row);
+    return;
+  }
+
+  const highlightKey = normalizeLeaderboardNameKey(highlightName);
+
+  entries.forEach((entry, index) => {
+    const row = document.createElement("tr");
+    const rank = index + 1;
+
+    row.className = "leaderboard-entry";
+    row.dataset.rank = String(rank);
+
+    if (highlightKey && normalizeLeaderboardNameKey(entry.name) === highlightKey) {
+      row.classList.add("is-current-player");
+    }
+
+    row.append(
+      createLeaderboardCell("leaderboard-rank", String(rank)),
+      createLeaderboardCell("leaderboard-name", entry.name),
+      createLeaderboardCell("leaderboard-score", `${entry.score}/${ROUND_QUESTION_COUNT}`),
+      createLeaderboardCell("leaderboard-time", formatTime(entry.elapsedSeconds))
+    );
+    tableBody.appendChild(row);
+  });
+}
+
+function renderLeaderboards(entries, highlightName = "") {
+  const safeEntries = sanitizeLeaderboardEntries(entries);
+  state.leaderboardEntries = safeEntries;
+  renderLeaderboardTable(ui.startLeaderboard, safeEntries);
+  renderLeaderboardTable(ui.resultLeaderboard, safeEntries, highlightName);
+}
+
+function setLeaderboardStatus(target, message, tone = "") {
+  target.textContent = message;
+  target.dataset.tone = tone;
+}
+
+async function leaderboardRequest(path, options = {}) {
+  if (!LEADERBOARD_API_URL) {
+    throw new Error("leaderboard-not-configured");
+  }
+
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 7000);
+
+  try {
+    const response = await fetch(`${LEADERBOARD_API_URL}${path}`, {
+      ...options,
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        ...options.headers
+      },
+      signal: controller.signal
+    });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "leaderboard-request-failed");
+    }
+
+    return data;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+async function refreshLeaderboard() {
+  if (!LEADERBOARD_API_URL) {
+    renderLeaderboards([]);
+    setLeaderboardStatus(
+      ui.startLeaderboardStatus,
+      "Die gemeinsame Bestenliste wird gerade eingerichtet."
+    );
+    return;
+  }
+
+  setLeaderboardStatus(ui.startLeaderboardStatus, "Bestenliste wird aktualisiert …");
+
+  try {
+    const data = await leaderboardRequest("/leaderboard");
+    renderLeaderboards(data.entries);
+    setLeaderboardStatus(
+      ui.startLeaderboardStatus,
+      "Gespeichert werden nur Spitzname, Punkte und Spielzeit.",
+      "success"
+    );
+  } catch {
+    if (state.leaderboardEntries.length === 0) {
+      renderLeaderboards([]);
+    }
+    setLeaderboardStatus(
+      ui.startLeaderboardStatus,
+      "Bestenliste gerade nicht erreichbar – das Quiz funktioniert trotzdem.",
+      "warning"
+    );
+  }
+}
+
+async function submitLeaderboardResult(elapsedSeconds) {
+  renderLeaderboards(state.leaderboardEntries, state.playerName);
+
+  if (!LEADERBOARD_API_URL) {
+    setLeaderboardStatus(
+      ui.resultLeaderboardStatus,
+      "Die gemeinsame Bestenliste wird gerade eingerichtet."
+    );
+    return;
+  }
+
+  setLeaderboardStatus(ui.resultLeaderboardStatus, "Dein Ergebnis wird gespeichert …");
+
+  try {
+    const data = await leaderboardRequest("/leaderboard", {
+      method: "POST",
+      body: JSON.stringify({
+        name: state.playerName,
+        score: state.score,
+        totalQuestions: state.questions.length,
+        elapsedSeconds,
+        website: ""
+      })
+    });
+    const entries = sanitizeLeaderboardEntries(data.entries);
+    const rank = Number(data.rank);
+    const improved = data.improved === true;
+
+    renderLeaderboards(entries, state.playerName);
+
+    if (improved && Number.isInteger(rank) && rank <= LEADERBOARD_LIMIT) {
+      setLeaderboardStatus(
+        ui.resultLeaderboardStatus,
+        rank === 1
+          ? "Neue Bestleistung – du stehst auf Platz 1!"
+          : `Neue Bestleistung – du stehst auf Platz ${rank}!`,
+        "success"
+      );
+    } else if (improved && Number.isInteger(rank)) {
+      setLeaderboardStatus(
+        ui.resultLeaderboardStatus,
+        `Ergebnis gespeichert – deine Bestleistung liegt auf Platz ${rank}.`,
+        "success"
+      );
+    } else {
+      setLeaderboardStatus(
+        ui.resultLeaderboardStatus,
+        "Deine bisherige persönliche Bestleistung bleibt gespeichert.",
+        "success"
+      );
+    }
+
+    setLeaderboardStatus(
+      ui.startLeaderboardStatus,
+      "Gespeichert werden nur Spitzname, Punkte und Spielzeit.",
+      "success"
+    );
+  } catch (error) {
+    setLeaderboardStatus(
+      ui.resultLeaderboardStatus,
+      error.message.includes("Zu viele")
+        ? error.message
+        : "Ergebnis konnte gerade nicht gespeichert werden – das Quiz funktioniert weiterhin.",
+      "warning"
+    );
+  }
 }
 
 function cacheElements() {
@@ -887,6 +1107,10 @@ function cacheElements() {
   ui.resultTime = document.getElementById("result-time");
   ui.resultAnswered = document.getElementById("result-answered");
   ui.resultBadge = document.getElementById("result-badge");
+  ui.startLeaderboard = document.getElementById("start-leaderboard");
+  ui.startLeaderboardStatus = document.getElementById("start-leaderboard-status");
+  ui.resultLeaderboard = document.getElementById("result-leaderboard");
+  ui.resultLeaderboardStatus = document.getElementById("result-leaderboard-status");
   ui.restartButton = document.getElementById("restart-button");
   ui.homeButton = document.getElementById("home-button");
 }
@@ -1062,8 +1286,10 @@ function finishQuiz() {
   ui.resultTime.textContent = formatTime(elapsedSeconds);
   ui.resultAnswered.textContent = `${state.questions.length} Fragen`;
   ui.resultBadge.textContent = badge;
+  setLeaderboardStatus(ui.resultLeaderboardStatus, "Dein Ergebnis wird gespeichert …");
   showScreen(ui.resultScreen);
   ui.restartButton.focus({ preventScroll: true });
+  void submitLeaderboardResult(elapsedSeconds);
 }
 
 function returnHome() {
@@ -1071,6 +1297,7 @@ function returnHome() {
   showScreen(ui.startScreen);
   ui.nameError.textContent = "";
   ui.playerName.focus({ preventScroll: true });
+  void refreshLeaderboard();
 }
 
 function initialize() {
@@ -1100,6 +1327,7 @@ function initialize() {
 
   ui.restartButton.addEventListener("click", () => startQuiz(state.playerName));
   ui.homeButton.addEventListener("click", returnHome);
+  void refreshLeaderboard();
 }
 
 window.HufschlagQuiz = Object.freeze({
@@ -1108,7 +1336,8 @@ window.HufschlagQuiz = Object.freeze({
   shuffle,
   prepareQuestions,
   formatTime,
-  normalizeName
+  normalizeName,
+  sanitizeLeaderboardEntries
 });
 
 document.addEventListener("DOMContentLoaded", initialize);

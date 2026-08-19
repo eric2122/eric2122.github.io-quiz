@@ -57,6 +57,17 @@ button {
   display: none !important;
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 .page-glow {
   position: fixed;
   z-index: 0;
@@ -309,6 +320,162 @@ input:focus-visible {
   color: var(--forest-700);
   font-size: 0.76rem;
   font-weight: 750;
+}
+
+.leaderboard-card {
+  max-width: 640px;
+  margin-top: 25px;
+  padding: 19px 20px 15px;
+  border: 1px solid rgba(18, 55, 47, 0.12);
+  border-radius: 19px;
+  background:
+    linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(237, 243, 237, 0.9));
+  box-shadow: 0 12px 32px rgba(18, 55, 47, 0.09);
+  text-align: left;
+}
+
+.leaderboard-card--result {
+  max-width: none;
+  margin: 0 0 30px;
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: none;
+}
+
+.leaderboard-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.leaderboard-kicker {
+  margin: 0 0 3px;
+  color: var(--gold);
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.leaderboard-heading h2 {
+  margin: 0;
+  color: var(--forest-950);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.leaderboard-shared {
+  display: inline-flex;
+  min-height: 28px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border: 1px solid rgba(35, 122, 83, 0.18);
+  border-radius: 999px;
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 0.69rem;
+  font-weight: 800;
+}
+
+.leaderboard-shared span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px rgba(35, 122, 83, 0.1);
+}
+
+.leaderboard-table-wrap {
+  overflow-x: auto;
+  border-block: 1px solid rgba(18, 55, 47, 0.1);
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.leaderboard-table th {
+  padding: 9px 8px 7px;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.leaderboard-table th:first-child {
+  width: 58px;
+}
+
+.leaderboard-table th:nth-child(3) {
+  width: 76px;
+}
+
+.leaderboard-table th:last-child {
+  width: 68px;
+}
+
+.leaderboard-entry td {
+  padding: 9px 8px;
+  border-top: 1px solid rgba(18, 55, 47, 0.07);
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+
+.leaderboard-entry.is-current-player td {
+  background: rgba(222, 241, 231, 0.7);
+}
+
+.leaderboard-rank {
+  color: var(--gold) !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem !important;
+  font-weight: 800;
+}
+
+.leaderboard-name {
+  overflow: hidden;
+  font-weight: 760;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-score,
+.leaderboard-time {
+  color: var(--forest-700) !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 780;
+}
+
+.leaderboard-placeholder td {
+  padding: 17px 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.leaderboard-status {
+  min-height: 18px;
+  margin: 9px 1px 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.leaderboard-status[data-tone="success"] {
+  color: var(--success);
+}
+
+.leaderboard-status[data-tone="warning"] {
+  color: var(--danger);
 }
 
 .hero-art {
@@ -885,6 +1052,27 @@ input:focus-visible {
 
   .result-actions {
     flex-direction: column;
+  }
+
+  .leaderboard-card {
+    padding: 17px 12px 13px;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-entry td {
+    padding-inline: 5px;
+  }
+
+  .leaderboard-table th:first-child {
+    width: 47px;
+  }
+
+  .leaderboard-table th:nth-child(3) {
+    width: 65px;
+  }
+
+  .leaderboard-table th:last-child {
+    width: 58px;
   }
 
   .site-footer span:first-child {

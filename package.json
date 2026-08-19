@@ -1,0 +1,19 @@
+{
+  "name": "hufschlag-pferdequiz",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/quiz.test.js tests/leaderboard.test.mjs tests/leaderboard-api.test.mjs",
+    "leaderboard:dev": "node scripts/local-leaderboard-server.mjs",
+    "leaderboard:cloudflare:dev": "wrangler dev --config worker/wrangler.jsonc --port 8787",
+    "leaderboard:migrate:local": "wrangler d1 migrations apply DB --local --config worker/wrangler.jsonc",
+    "leaderboard:migrate:remote": "wrangler d1 migrations apply DB --remote --config worker/wrangler.jsonc",
+    "leaderboard:deploy": "wrangler deploy --config worker/wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "4.124.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260815.1": true
+  }
+}

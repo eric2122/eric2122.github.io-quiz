@@ -94,5 +94,10 @@ test("HTML-IDs sind eindeutig und alle JavaScript-Verweise vorhanden", () => {
   referencedIds.forEach((id) => assert.ok(htmlIds.includes(id), `HTML-Element #${id} fehlt`));
   assert.match(html, /20 aus 100 Fragen/);
   assert.match(html, /Zur Startseite/);
+  assert.match(html, /Gemeinsame Bestenliste/);
+  assert.match(html, /id="start-leaderboard"/);
+  assert.match(html, /id="result-leaderboard"/);
+  assert.match(html, /leaderboard-config\.js\?v=20260820a/);
   assert.match(source, /const FEEDBACK_DELAY_MS = 5000;/);
+  assert.match(source, /submitLeaderboardResult\(elapsedSeconds\)/);
 });

@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173f35">
   <meta name="description" content="Ein modernes Pferdequiz mit 100 Fragen im Pool und 20 zufälligen Fragen pro Runde.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://hufschlag-leaderboard.ericyo79.workers.dev http://127.0.0.1:8787 http://localhost:8787; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Hufschlag – Das Pferdequiz</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B4%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20260819d">
-  <script src="script.js?v=20260819d" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260820a">
+  <script src="leaderboard-config.js?v=20260820a" defer></script>
+  <script src="script.js?v=20260820a" defer></script>
 </head>
 <body>
   <div class="page-glow page-glow--one" aria-hidden="true"></div>
@@ -56,6 +58,36 @@
           <li>Verhalten</li>
           <li>Allgemeines</li>
         </ul>
+
+        <section class="leaderboard-card leaderboard-card--start" aria-labelledby="start-leaderboard-title">
+          <div class="leaderboard-heading">
+            <div>
+              <p class="leaderboard-kicker">Gemeinsame Bestenliste</p>
+              <h2 id="start-leaderboard-title">Die Top 5</h2>
+            </div>
+            <span class="leaderboard-shared"><span aria-hidden="true"></span> Für alle</span>
+          </div>
+
+          <div class="leaderboard-table-wrap">
+            <table class="leaderboard-table">
+              <caption class="visually-hidden">Die fünf besten Quiz-Ergebnisse</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Platz</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Punkte</th>
+                  <th scope="col">Zeit</th>
+                </tr>
+              </thead>
+              <tbody id="start-leaderboard" aria-live="polite">
+                <tr class="leaderboard-placeholder">
+                  <td colspan="4">Bestenliste wird geladen …</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="leaderboard-status" id="start-leaderboard-status">Gespeichert werden nur Spitzname, Punkte und Spielzeit.</p>
+        </section>
       </div>
 
       <div class="hero-art" aria-hidden="true">
@@ -143,6 +175,36 @@
             <strong id="result-answered">20 Fragen</strong>
           </div>
         </div>
+
+        <section class="leaderboard-card leaderboard-card--result" aria-labelledby="result-leaderboard-title">
+          <div class="leaderboard-heading">
+            <div>
+              <p class="leaderboard-kicker">Gemeinsame Bestenliste</p>
+              <h2 id="result-leaderboard-title">Die Top 5</h2>
+            </div>
+            <span class="leaderboard-shared"><span aria-hidden="true"></span> Für alle</span>
+          </div>
+
+          <div class="leaderboard-table-wrap">
+            <table class="leaderboard-table">
+              <caption class="visually-hidden">Die fünf besten Quiz-Ergebnisse</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Platz</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Punkte</th>
+                  <th scope="col">Zeit</th>
+                </tr>
+              </thead>
+              <tbody id="result-leaderboard" aria-live="polite">
+                <tr class="leaderboard-placeholder">
+                  <td colspan="4">Dein Ergebnis wird eingetragen …</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="leaderboard-status" id="result-leaderboard-status" role="status">Ergebnis wird gespeichert …</p>
+        </section>
 
         <div class="result-actions">
           <button class="primary-button" id="restart-button" type="button">Nochmal spielen <span aria-hidden="true">↻</span></button>
