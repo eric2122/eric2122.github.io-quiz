@@ -4,15 +4,14 @@
   "main": "src/index.mjs",
   "compatibility_date": "2026-08-19",
   "workers_dev": true,
+  "preview_urls": false,
   "vars": {
-    "ALLOWED_ORIGINS": "https://eric2122.github.io,http://127.0.0.1:4173,http://localhost:4173"
+    "ALLOWED_ORIGINS": "https://eric2122.github.io"
   },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "hufschlag-leaderboard",
-      "database_id": "da554b10-776e-473a-82b9-0e16d9f76cf2",
-      "migrations_dir": "migrations"
+      "database_id": "da554b10-776e-473a-82b9-0e16d9f76cf2"
     }
   ],
   "ratelimits": [
@@ -24,5 +23,11 @@
         "period": 60
       }
     }
-  ]
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true
+    }
+  }
 }
