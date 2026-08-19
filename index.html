@@ -1,129 +1,160 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="de">
 <head>
-    <title>Star Trek Landingpage</title>
-    <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .loader {
-            position: relative;
-            height: 40px;
-            width: 500px;
-            border: 1px solid rgba(158, 103, 162, 1);
-            border-radius: 20px;
-            overflow: hidden;
-            background: #000;
-            box-shadow: 0 0 10px rgba(158, 103, 162, 1);
-        }
-
-        .loader:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(158, 103, 162, 1), transparent);
-            animation: load 5s forwards;
-        }
-
-        .loader .fill {
-            position: relative;
-            background-color: #000;
-            height: 100%;
-            width: 0%;
-            z-index: 1;
-        }
-
-        .loader .label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
-            color: #fff;
-        }
-
-        #startButton {
-            display: none;
-            width: 200px;
-            height: 60px;
-            border: 1px solid rgba(158, 103, 162, 1);
-            border-radius: 30px;
-            background-color: #000;
-            color: #fff;
-            font-size: 24px;
-            line-height: 60px;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(158, 103, 162, 1);
-            text-align: center;
-            transition: background 0.5s;
-        }
-
-        #startButton:hover {
-            background-color: rgba(158, 103, 162, 1);
-            color: #000;
-        }
-
-        @keyframes load {
-            0% {
-                transform: translateX(-100%);
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="Ein modernes Pferdequiz mit 30 Fragen zu Rassen, Haltung, Pflege, Anatomie, Reiten und Verhalten.">
+  <title>Hufschlag – Das Pferdequiz</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B4%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=20260819">
+  <script src="script.js?v=20260819" defer></script>
 </head>
 <body>
-    <div class="loader" id="loader">
-        <div class="fill" id="fill"></div>
-        <div class="label" id="label">0%</div>
-    </div>
-    <div id="startButton" onclick="goToQuiz()">Start</div>
-    <script>
-        function startLoading() {
-            var loader = document.getElementById("loader");
-            var element = document.getElementById("fill");
-            var label = document.getElementById("label");
-            var startButton = document.getElementById("startButton");
-            var width = 0;
-            var interval = setInterval(frame, 50); // Updated to make the progress from 0 to 100 in 5 seconds.
-            function frame() {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    loader.style.display = 'none';
-                    startButton.style.display = 'block';
-                } else {
-                    width++; 
-                    element.style.width = width + '%'; 
-                    label.textContent = width + '%';
-                }
-            }
-        }
+  <div class="page-glow page-glow--one" aria-hidden="true"></div>
+  <div class="page-glow page-glow--two" aria-hidden="true"></div>
 
-        function goToQuiz() {
-            window.location.href = "quiz.html";
-        }
+  <main class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Hufschlag Pferdequiz – Startseite">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img">
+            <path d="M15 39c0-8 2-12 7-17l-2-9 8 5c4-3 8-4 11-3-2 3-4 6-4 10 0 8-5 14-13 14h-7Z"/>
+            <path d="M29 18c1 4 4 6 8 6M22 22c3 2 6 3 10 2"/>
+            <circle cx="30.5" cy="19" r="1.25"/>
+          </svg>
+        </span>
+        <span>Hufschlag</span>
+      </a>
+      <span class="header-note">30 Fragen · 7 Kategorien</span>
+    </header>
 
-        window.onload = startLoading;
-    </script>
+    <section class="screen start-screen" id="start-screen" aria-labelledby="start-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Pferdewissen auf die Probe gestellt</p>
+        <h1 id="start-title">Wie gut kennst du dich <em>mit Pferden</em> aus?</h1>
+        <p class="intro">Von Huf bis Mähne: 30 abwechslungsreiche Fragen warten auf dich. Antworte zügig, sammle Punkte und werde zum Pferdeprofi.</p>
+
+        <form class="start-form" id="start-form" novalidate>
+          <label for="player-name">Wie dürfen wir dich nennen?</label>
+          <div class="input-row">
+            <input id="player-name" name="player-name" type="text" maxlength="24" autocomplete="name" placeholder="Dein Name" required>
+            <button class="primary-button" type="submit">
+              Quiz starten
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="form-message" id="name-error" role="alert"></p>
+        </form>
+
+        <ul class="category-list" aria-label="Quiz-Kategorien">
+          <li>Rassen</li>
+          <li>Haltung</li>
+          <li>Pflege</li>
+          <li>Anatomie</li>
+          <li>Reiten</li>
+          <li>Verhalten</li>
+          <li>Allgemeines</li>
+        </ul>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div>
+        <svg class="horse-illustration" viewBox="0 0 520 520">
+          <path class="land land--back" d="M0 329c90-56 154-55 230-15 88 47 170 4 290-49v255H0Z"/>
+          <path class="land land--front" d="M0 387c98-47 176-39 255 4 81 45 173 28 265-8v137H0Z"/>
+          <g class="horse-line">
+            <path d="M171 366c8-50 25-91 63-126 20-19 28-51 25-88l46 39c28-19 62-25 94-13-18 22-27 45-28 68-2 54-37 105-98 123-34 10-69 8-102-3Z"/>
+            <path d="M304 190c17 23 42 34 74 34M234 240c33 19 72 22 115 8M233 315c26 9 58 8 93-3"/>
+            <path d="M256 154c-22 10-38 27-48 51M202 360c-3 29-13 53-29 73M314 363c7 27 7 49 1 68"/>
+            <circle cx="323" cy="202" r="4"/>
+          </g>
+        </svg>
+        <div class="art-card">
+          <strong>20 Sekunden</strong>
+          <span>pro Frage</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen quiz-screen" id="quiz-screen" aria-labelledby="question-text" hidden>
+      <div class="quiz-topbar">
+        <div class="player-chip">
+          <span class="player-avatar" id="player-avatar" aria-hidden="true">P</span>
+          <div>
+            <span class="meta-label">Spieler</span>
+            <strong id="player-display">Pferdefreund</strong>
+          </div>
+        </div>
+        <div class="score-chip">
+          <span class="meta-label">Punkte</span>
+          <strong><span id="score">0</span> / <span id="score-total">30</span></strong>
+        </div>
+        <div class="timer-chip" id="timer-chip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/></svg>
+          <div>
+            <span class="meta-label">Zeit</span>
+            <strong><span id="timer">20</span> s</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <div class="progress-copy">
+          <span id="progress-text">Frage 1 von 30</span>
+          <span id="category">Rassen</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Quiz-Fortschritt" aria-valuemin="1" aria-valuemax="30" aria-valuenow="1">
+          <span id="progress-bar"></span>
+        </div>
+      </div>
+
+      <article class="question-card">
+        <p class="question-kicker">Deine Frage</p>
+        <h2 id="question-text">Frage wird geladen …</h2>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback" aria-live="polite" aria-atomic="true"></div>
+      </article>
+    </section>
+
+    <section class="screen result-screen" id="result-screen" aria-labelledby="result-title" hidden>
+      <div class="result-card">
+        <div class="result-badge" id="result-badge" aria-hidden="true">★</div>
+        <p class="eyebrow">Ziel erreicht</p>
+        <h1 id="result-title">Stark geritten, <span id="result-name">Pferdefreund</span>!</h1>
+        <p class="result-message" id="result-message">Du kennst dich richtig gut aus.</p>
+
+        <div class="result-score">
+          <span id="result-score">0</span>
+          <span>/ 30 Punkte</span>
+        </div>
+
+        <div class="result-stats">
+          <div>
+            <span class="meta-label">Trefferquote</span>
+            <strong id="result-percent">0 %</strong>
+          </div>
+          <div>
+            <span class="meta-label">Gesamtzeit</span>
+            <strong id="result-time">00:00</strong>
+          </div>
+          <div>
+            <span class="meta-label">Beantwortet</span>
+            <strong>30 Fragen</strong>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="primary-button" id="restart-button" type="button">Nochmal spielen <span aria-hidden="true">↻</span></button>
+          <button class="secondary-button" id="home-button" type="button">Anderer Name</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>Mit Ruhe, Wissen und einer Portion Pferdeliebe.</span>
+      <span aria-hidden="true">♞</span>
+    </footer>
+  </main>
 </body>
 </html>
