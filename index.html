@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173f35">
-  <meta name="description" content="Ein modernes Pferdequiz mit 30 Fragen zu Rassen, Haltung, Pflege, Anatomie, Reiten und Verhalten.">
+  <meta name="description" content="Ein modernes Pferdequiz mit 100 Fragen im Pool und 20 zufälligen Fragen pro Runde.">
   <title>Hufschlag – Das Pferdequiz</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B4%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20260819">
-  <script src="script.js?v=20260819" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260819c">
+  <script src="script.js?v=20260819c" defer></script>
 </head>
 <body>
   <div class="page-glow page-glow--one" aria-hidden="true"></div>
@@ -26,14 +26,14 @@
         </span>
         <span>Hufschlag</span>
       </a>
-      <span class="header-note">30 Fragen · 7 Kategorien</span>
+      <span class="header-note">20 aus 100 Fragen · 7 Kategorien</span>
     </header>
 
     <section class="screen start-screen" id="start-screen" aria-labelledby="start-title">
       <div class="hero-copy">
         <p class="eyebrow">Pferdewissen auf die Probe gestellt</p>
         <h1 id="start-title">Wie gut kennst du dich <em>mit Pferden</em> aus?</h1>
-        <p class="intro">Von Huf bis Mähne: 30 abwechslungsreiche Fragen warten auf dich. Antworte zügig, sammle Punkte und werde zum Pferdeprofi.</p>
+        <p class="intro">Von Huf bis Mähne: In jeder Runde werden 20 Fragen zufällig aus einem Pool von 100 ausgewählt. Antworte zügig, sammle Punkte und werde zum Pferdeprofi.</p>
 
         <form class="start-form" id="start-form" novalidate>
           <label for="player-name">Wie dürfen wir dich nennen?</label>
@@ -88,7 +88,7 @@
         </div>
         <div class="score-chip">
           <span class="meta-label">Punkte</span>
-          <strong><span id="score">0</span> / <span id="score-total">30</span></strong>
+          <strong><span id="score">0</span> / <span id="score-total">20</span></strong>
         </div>
         <div class="timer-chip" id="timer-chip">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/></svg>
@@ -101,10 +101,10 @@
 
       <div class="progress-block">
         <div class="progress-copy">
-          <span id="progress-text">Frage 1 von 30</span>
+          <span id="progress-text">Frage 1 von 20</span>
           <span id="category">Rassen</span>
         </div>
-        <div class="progress-track" role="progressbar" aria-label="Quiz-Fortschritt" aria-valuemin="1" aria-valuemax="30" aria-valuenow="1">
+        <div class="progress-track" role="progressbar" aria-label="Quiz-Fortschritt" aria-valuemin="1" aria-valuemax="20" aria-valuenow="1">
           <span id="progress-bar"></span>
         </div>
       </div>
@@ -126,7 +126,7 @@
 
         <div class="result-score">
           <span id="result-score">0</span>
-          <span>/ 30 Punkte</span>
+          <span>/ <span id="result-total">20</span> Punkte</span>
         </div>
 
         <div class="result-stats">
@@ -140,7 +140,7 @@
           </div>
           <div>
             <span class="meta-label">Beantwortet</span>
-            <strong>30 Fragen</strong>
+            <strong id="result-answered">20 Fragen</strong>
           </div>
         </div>
 

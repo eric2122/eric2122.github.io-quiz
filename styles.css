@@ -695,14 +695,15 @@ input:focus-visible {
   color: var(--forest-700);
 }
 
-.result-score span:first-child {
+.result-score > span:first-child {
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(4.8rem, 13vw, 7.6rem);
   line-height: 0.9;
 }
 
-.result-score span:last-child {
+.result-score > span:last-child {
   color: var(--muted);
+  font-size: 1.1rem;
   font-weight: 750;
 }
 
